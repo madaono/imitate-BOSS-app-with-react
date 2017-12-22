@@ -1,3 +1,5 @@
 .error-msg{
-    color: red;
+    color: #ff0077;
+    padding-top: 20px;
+    padding-left: 20px;
 }

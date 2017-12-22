@@ -8,6 +8,7 @@ const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
 
 
 const initState = {
+  redirectTo:'',
   isAuth:'',
   msg:'',
   user:'',
