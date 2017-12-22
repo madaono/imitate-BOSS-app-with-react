@@ -2,12 +2,12 @@ import React from 'react'
 import Logo from '../../component/logo/logo'
 import { List, Radio, InputItem, WingBlank, WhiteSpace, Button } from 'antd-mobile'
 import {connect} from 'react-redux'
-import {regisger} from "../../redux/user.redux";
+import {register} from "../../redux/user.redux";
 import './index.css'
 
 @connect(
   state=>state.user,
-  {regisger}
+  {register}
 )
 class Register extends React.Component{
   constructor(props){
@@ -27,7 +27,7 @@ class Register extends React.Component{
     })
   }
   handleRegister(){
-    this.props.regisger(this.state)
+    this.props.register(this.state)
     console.log(this.state)
   }
   render(){
