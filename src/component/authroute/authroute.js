@@ -31,7 +31,7 @@ class AuthRoute extends React.Component{
   }
 
   render(){
-    return <p>判断跳转的</p>
+    return null
   }
 }
 
