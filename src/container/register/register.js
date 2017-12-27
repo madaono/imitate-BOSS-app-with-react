@@ -6,6 +6,7 @@ import {Redirect} from 'react-router-dom'
 import {register} from "../../redux/user.redux";
 import './index.css'
 
+
 @connect(
   state=>state.user,
   {register}

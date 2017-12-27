@@ -6,14 +6,12 @@ import NavLinkBar from '../navlink/navlink'
 import Boss from '../../component/boss/boss'
 import Genius from '../../component/genius/genius'
 // import Msg from '../../component/msg/msg'
-// import User from '../../component/user/user'
+import User from '../../component/user/user'
 
 function Msg() {
   return <h1>Msg</h1>
 }
-function User() {
-  return <h1>User</h1>
-}
+
 @connect(
   state=>state
 )
