@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-
+//开启mongodb"C:\Program Files\MongoDB\Server\3.6\bin\mongod.exe"
 class App extends Component {
   render() {
     return (

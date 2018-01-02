@@ -7,16 +7,20 @@ import Boss from '../../component/boss/boss'
 import Genius from '../../component/genius/genius'
 // import Msg from '../../component/msg/msg'
 import User from '../../component/user/user'
-
+import {getMsgList,recvMsg} from '../../redux/chat.redux'
 function Msg() {
   return <h1>Msg</h1>
 }
 
 @connect(
-  state=>state
+  state=>state,
+  {getMsgList,recvMsg}
 )
 class Dashboard extends React.Component{
-
+  componentDidMount(){
+    this.props.getMsgList()
+    this.props.recvMsg()
+  }
   render(){
     const {pathname} = this.props.location
     const user = this.props.user
@@ -62,7 +66,9 @@ class Dashboard extends React.Component{
             ))}
           </Switch>
         </div>
-        <NavLinkBar data={navList}></NavLinkBar>
+        <NavLinkBar
+
+          data={navList}></NavLinkBar>
       </div>
     )
   }
