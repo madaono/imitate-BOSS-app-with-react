@@ -1,3 +1,5 @@
+//开启mongodb"C:\Program Files\MongoDB\Server\3.6\bin\mongod.exe"
+
 const express = require('express')
 const bodyParser = require('body-parser')
 const cookParser = require('cookie-parser')

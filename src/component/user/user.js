@@ -32,7 +32,7 @@ class User extends React.Component{
     return props.user?(
       <div>
         <Result
-          img={<img src={require(`../img/${props.avatar}.png`)} style={{width:50}} />}
+          img={<img alt='avatar' src={require(`../img/${props.avatar}.png`)} style={{width:50}} />}
           title={props.user}
           message={props.type==='boss'?props.company:null}
         />
