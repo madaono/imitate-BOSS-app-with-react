@@ -21,7 +21,7 @@ assethook({
 
 import App from '../src/App'
 import reducers from "../src/reducer";
-import {renderToString,renderToStaticMarkup} from 'react-dom/server'
+import {renderToString,renderToNodeStream} from 'react-dom/server'
 import staticPath from '../build/asset-manifest'
 
 
@@ -49,7 +49,7 @@ io.on('connection',function (socket) {
 const userRouter = require('./user')
 
 
-
+//react16有了新的流SSR API，速度比现在这种快3倍
 app.use(cookParser())
 app.use(bodyParser.json())
 app.use('/user',userRouter)
@@ -61,7 +61,40 @@ app.use(function (req,res,next) {
     applyMiddleware(thunk)
   ))
   let context = {}
-  const markup = renderToString(
+  // const markup = renderToString(
+  //   <Provider store={store}>
+  //     <StaticRouter
+  //       location={req.url}
+  //       context={context}
+  //     >
+  //       <App></App>
+  //     </StaticRouter>
+  //   </Provider>
+  // )
+  const metaObj = {
+    '/msg': 'React聊天消息列表',
+    '/boss': 'boss查看牛人列表页面'
+  }
+
+  res.write(`
+    <!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="theme-color" content="#000000">
+        <meta name="keywords" content="React,Redux,Node,SSR,BOSS,">
+        <meta name="description" content="${metaObj[req.url]}">
+        <title>React BOSS App</title>
+        <link rel="stylesheet" href="/${staticPath['main.css']}">
+      </head>
+      <body>
+        <noscript>
+          You need to enable JavaScript to run this app.
+        </noscript>
+        <div id="root">
+  `)
+  const markupStream = renderToNodeStream(
     <Provider store={store}>
       <StaticRouter
         location={req.url}
@@ -71,34 +104,41 @@ app.use(function (req,res,next) {
       </StaticRouter>
     </Provider>
   )
-  const metaObj = {
-    '/msg': 'React聊天消息列表',
-    '/boss': 'boss查看牛人列表页面'
-  }
-  const pageHtml = `
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="theme-color" content="#000000">
-    <meta name="keywords" content="React,Redux,Node,SSR,BOSS,">
-    <meta name="description" content="${metaObj[req.url]}">
-    <title>React BOSS App</title>
-    <link rel="stylesheet" href="/${staticPath['main.css']}">
-  </head>
-  <body>
-    <noscript>
-      You need to enable JavaScript to run this app.
-    </noscript>
-    <div id="root">${markup}</div>
-    <script src="/${staticPath['main.js']}"></script>
-  </body>
-</html>
 
-  `
+  markupStream.pipe(res,{end:false})
+  markupStream.on('end', ()=>{
+    res.write(`
+      </div>
+          <script src="/${staticPath['main.js']}"></script>
+        </body>
+      </html>
+    `)
+    res.end()
+  })
 
-  res.send(pageHtml)
+/*  const pageHtml = `
+    <!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="theme-color" content="#000000">
+        <meta name="keywords" content="React,Redux,Node,SSR,BOSS,">
+        <meta name="description" content="${metaObj[req.url]}">
+        <title>React BOSS App</title>
+        <link rel="stylesheet" href="/${staticPath['main.css']}">
+      </head>
+      <body>
+        <noscript>
+          You need to enable JavaScript to run this app.
+        </noscript>
+        <div id="root">${markup}</div>
+        <script src="/${staticPath['main.js']}"></script>
+      </body>
+    </html>
+  `*/
+
+  // res.send(pageHtml)
   // return res.sendFile(path.resolve('build/index.html'))
 })
 app.use('/',express.static(path.resolve('build')))

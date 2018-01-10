@@ -15,7 +15,7 @@ const store = createStore(reducers, compose(
   window.devToolsExtension ? window.devToolsExtension() : f => f
 ))
 //boss genius me msg four-page
-ReactDOM.render(
+ReactDOM.hydrate(
   (
     <Provider store={store}>
       <BrowserRouter>
